@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<HTML>
+	<Head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<Title>JKIDDFeed</Title>
+
+    <script>
+      $(function () {
+        loadComments();
+      });
+
+      function loadComments() {
+        $.ajax({
+          url: '/getcomments',
+          cache: false,
+          success: function (json) {
+            for (var i = 0; i < json.length; i++) {
+              var comment = '<div class="panel panel-default"><div class="panel-body">' + json[i] + '</div></div>'
+              $('#comments').append(comment);
+            }
+          }
+        });
+      }
+
+      function sendComment() {
+        var comment = $('#comment').val();
+        console.log(comment);
+        $.ajax({
+          url: '/submitcomment',
+          type: 'POST',
+          data: { comment: comment },
+          dataType: 'json'
+        });
+        var comment = '<div class="panel panel-default"><div class="panel-body">' + comment + '</div></div>'
+        $('#comments').append(comment);
+      }
+    </script>
+	<Head/>
+
+	<Body>
+    <h1>JKIDDFeed</h1>
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Feed</a></li>
+        <li><a>Events</a></li>
+        <li><a>Profiles</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div id="comments"></div>
+
+  <input id="comment" name="comment" value="" />
+  <button type="submit" class="btn btn-default" onclick="sendComment()">Send</button>
+</form>
+		</Body>
+</HTML>
